@@ -1,0 +1,14 @@
+	Caenea	Cfuscata	Ccaxiensis	Ctarsata	Cflavifrons	Ctrigonoides	Cobsoleta	Epicharissp2	Amellifera	Centrissp3	Centrissp1	Xylocopasp	Xgrisescens
+Dpubipetala	1368	1364	740	460	416	256	0	328	364	368	0	0	0
+Bgardnerana	924	320	2108	464	284	0	0	0	28	0	0	0	0
+Bmuricata	764	680	528	308	404	300	0	28	0	0	0	76	0
+Heteropteryssp1	740	656	528	332	0	324	0	116	116	0	0	0	0
+Heteropteryssp2	604	452	432	200	0	0	0	0	0	0	0	0	0
+Dbracteosa	556	512	356	132	524	0	0	0	0	0	0	0	0
+Cchasei	504	816	0	0	0	0	0	0	0	0	0	0	0
+Sparalias	396	468	108	140	272	652	912	364	44	0	368	164	84
+Bstellaris	292	300	244	116	0	0	0	0	0	0	0	0	0
+Bschizoptera	268	196	0	0	164	0	0	0	0	0	0	0	0
+Sauriculatum	240	164	68	0	196	0	0	0	0	0	0	0	0
+Sciliatum	228	224	124	120	0	0	0	0	0	0	0	0	0
+Janisandra	188	244	0	96	0	0	0	0	0	0	0	0	0
