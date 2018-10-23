@@ -60,9 +60,13 @@ library(network)
 library(tcltk)
 library(vegan)
 library(network)
+library(rstudioapi)
 
-#Set the working directory
-setwd("path to the folder")
+
+# Set the working directory automatically to the source file location 
+current_path <- getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
+print( getwd() )
 
 
 ##############################################################
