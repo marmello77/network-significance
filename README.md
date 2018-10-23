@@ -6,7 +6,7 @@ Authors: Renata Muylaert & Pavel Dodonov.
 
 E-mail: renatamuy@gmail.com.
 
-How to cite: Muylaert RL & Dodonov P. 2016. How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures in R. Ecological Synthesis Lab at the University of São Paulo, Brazil.
+How to cite: Muylaert RL & Dodonov P. 2016. How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures in R. Ecological Synthesis Lab of the University of São Paulo, Brazil.
 
 Published on April 25th, 2017 (English version).
 
