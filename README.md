@@ -1,6 +1,4 @@
-# network-significance
-
-How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures in R.
+# How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures in R.
 
 Ecological Synthesis Lab (SintECO): https://marcomellolab.wordpress.com.
 
