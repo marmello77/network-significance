@@ -63,7 +63,7 @@ print( getwd() )
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 
 #Calculate the desired metric for the original network (observed)
 obs <- unlist(networklevel(data, index="nestedness"))
@@ -103,7 +103,7 @@ ifelse(praw > 0.5, 1-praw, praw)    # P-value
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data_neo=as.matrix(data)
 data_neo
 
@@ -187,7 +187,7 @@ significance.patef
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data
 
 #Run the QuanBiMo algorithm
@@ -205,7 +205,7 @@ dev.off()
 
 
 #Calculate hierarchical modules
-modn <- computeModules(data, steps=1E6, deep=T) 
+modn <- computeModules(data, steps=1E6, deep=T, method= "DormannStrauss") 
 
 #Estimate the P-value using the Patefield (1981) algorithm
 nulls <- nullmodel(data, N=999, method="r2d")
@@ -242,9 +242,9 @@ ifelse(praw > 0.5, 1-praw, praw)
 rm(list= ls())
 
 #Load the two networks as objects
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data
-data2<-read.table("rede2.txt", head=TRUE)
+data2<-read.table("net2.txt", head=TRUE)
 data2
 data_neo=as.matrix(data)
 data_neo
