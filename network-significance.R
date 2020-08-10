@@ -62,7 +62,7 @@ rm(list= ls())
 data<-read.table("net1.txt", head=TRUE)
 
 #Calculate the desired metric for the original network (observed)
-obs <- unlist(networklevel(data, index="nestedness"))
+obs <- unlist(networklevel(data, index="NODF"))
 obs
 
 #Create randomized networks using a null model. 
@@ -71,7 +71,7 @@ obs
 nulls <- nullmodel(data, N=10, method=5, autotransform="equiprobable")
 
 #Calculate the same metric for all randomized networks
-null <- unlist(sapply(nulls, networklevel, index="nestedness")) 
+null <- unlist(sapply(nulls, networklevel, index="NODF")) 
 null
 
 #Plot the observed value against the distribution of randomized values
