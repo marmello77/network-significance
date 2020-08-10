@@ -8,7 +8,7 @@
 ##### https://marcomellolab.wordpress.com
 ##### Authors: Renata Muylaert, Pavel Dodonov & Marco Mello
 ##### E-mail: renatamuy@gmail.com
-##### How to cite: Muylaert RL, Dodonov P & Marco Mello. 2016. How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures. Ecological Synthesis Lab at the University of São Paulo, Brazil.
+##### How to cite: Muylaert RL, Dodonov P & Marco Mello. 2016. How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures. Ecological Synthesis Lab at the University of S??o Paulo, Brazil.
 ##### Published on April 25th, 2017 (English version).
 ##### Run in R 3.3.3 (2017-03-06) -- "Another Canoe"
 
@@ -45,13 +45,9 @@ library(network)
 library(tcltk)
 library(vegan)
 library(network)
-library(rstudioapi)
 
-
-# Set the working directory automatically to the source file location 
-current_path <- getActiveDocumentContext()$path 
-setwd(dirname(current_path ))
-print( getwd() )
+#Set the working directory
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 
 ##############################################################
@@ -63,7 +59,7 @@ print( getwd() )
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 
 #Calculate the desired metric for the original network (observed)
 obs <- unlist(networklevel(data, index="nestedness"))
@@ -103,7 +99,7 @@ ifelse(praw > 0.5, 1-praw, praw)    # P-value
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data_neo=as.matrix(data)
 data_neo
 
@@ -187,7 +183,7 @@ significance.patef
 rm(list= ls())
 
 #Create the object to be analyzed
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data
 
 #Run the QuanBiMo algorithm
@@ -242,9 +238,9 @@ ifelse(praw > 0.5, 1-praw, praw)
 rm(list= ls())
 
 #Load the two networks as objects
-data<-read.table("rede1.txt", head=TRUE)
+data<-read.table("net1.txt", head=TRUE)
 data
-data2<-read.table("rede2.txt", head=TRUE)
+data2<-read.table("net2.txt", head=TRUE)
 data2
 data_neo=as.matrix(data)
 data_neo
@@ -398,7 +394,7 @@ while (i<=Nperm){
 	like.nulls1_aleat <- sapply(modules.nulls1, function(x) x@likelihood)
 
 	mod_val1_aleat<- (mod1@likelihood - mean(like.nulls1_aleat))/sd(like.nulls1_aleat)
-	#Rede 2
+	#net 2
  	nulls2 <- nullmodel(data2_aleat, N=9, method="r2d")
  	modules.nulls2_aleat <- sapply(nulls2, computeModules)
 	print("passed nulls aleat2") 
@@ -481,24 +477,24 @@ significance.patef2
 
 #Bascompte, J., Jordano, P., Melian, C.J. & Olesen, J.M. (2003) The nested assembly
 	#of plant-animal mutualistic networks. Proceedings of the National Academy
-	#of Sciences of the United States of America, 100, 9383–9387.
+	#of Sciences of the United States of America, 100, 9383???9387.
 
 #Bezerra, E.L.S., Machado, I.C. & Mello, M.A.R. (2009) Pollination networks of
   #oil-flowers: a tiny world within the smallest of all worlds. Journal of Animal
-  #Ecology, 78, 1096–101.
-  #Fonte da rede1 do exemplo (Catimbau).
+  #Ecology, 78, 1096???101.
+  #Fonte da net1 do exemplo (Catimbau).
 
 #Blondel, V.D., Guillaume, J.-L., Lambiotte, R. & Lefebvre, E. (2008) Fast 
 	#unfolding of communities in large networks. Journal of Statistical Mechanics:
 	#Theory and Experiment, 2008, P10008.
 
 #Dormann, C.F. & Strauss, R. (2014) A method for detecting modules in quantitative
-	#bipartite networks (ed P Peres-Neto). Methods in Ecology and Evolution, 5, 90–98.
+	#bipartite networks (ed P Peres-Neto). Methods in Ecology and Evolution, 5, 90???98.
 
 #Patefield, W.M. 1981. Algorithm AS159. An efficient method of generating
 	#r x c tables with given row and column totals. Applied Statistics 30, 91-97.
 
 #Vazquez, D.P. & Simberloff, D. 2003. Changes in interaction biodiversity
   #induced by an introduced ungulate. Ecology Letters, 6, 1077-1083.
-  #Fonte da rede2 do exemplo (Safariland, parcial).
+  #Fonte da net2 do exemplo (Safariland, parcial).
 
