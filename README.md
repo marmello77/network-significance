@@ -24,9 +24,9 @@ This script provided a series of codes to estimate the significance (P-value) of
 
 ## List of files
 
-1. net1.txt -> example data from Bezerra et al. (2009, J.Anim.Ecol.).
+1. net1.txt -> example data from Bezerra et al. (2009, J.Anim.Ecol.). Interactions of pollination between oil-collecting bees (Centridini) and oil flowers (Malpighiaceae).
 
-2. net2.txt -> example data from Queiroz et al. (2020, Biotropica).
+2. net2.txt -> example data from Queiroz et al. (2020, Biotropica). Interactions of pollination between bats (Chiroptera), hawkmoths (Sphingidae), and plants.
 
 3. network-significance.R -> script to estimate P-values of network metrics in different situations. This script includes code to plot the distribution of randomized values and the observed value. Always visualize the data before calculating the statistics!
 
@@ -43,7 +43,7 @@ If you have any questions, suggestions, or corrections, please feel free to open
 
 ## Data sources
 
-1. net1 -> Bezerra, E. L. S., Machado, I. C., & Mello, M. A. R. (2009). [Pollination networks of oil-flowers: a tiny world within the smallest of all worlds](https://doi.org/10.1111/j.1365-2656.2009.01567.x). Journal of Animal Ecology, 78(5), 1096–1101.
+1. net1 -> Bezerra, E. L. S., Machado, I. C., & Mello, M. A. R. (2009). [Pollination networks of oil-flowers: a tiny world within the smallest of all worlds](https://doi.org/10.1111/j.1365-2656.2009.01567.x). Journal of Animal Ecology, 78(5), 1096–1101. 
 
 2. net2 -> Queiroz, J. A., Diniz, U. M., Vázquez, D. P., Quirino, Z. M., Santos, F. A. R., Mello, M. A. R., & Machado, I. C. (2020). Bats and hawkmoths form mixed modules with flowering plants in a nocturnal interaction network. Biotropica, *accepted*. See also this [repo](https://github.com/marmello77/queiroz-et-al-2020).
 
