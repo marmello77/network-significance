@@ -19,7 +19,7 @@ Disclaimer: You may use this software freely for any purposes at your own risk. 
 
 ## Functionality and origin
 
-This script provided a series of codes to estimate the significance (P-value) of network-level metrics for a single network and for comparing two networks. We first wrote it to use in a series of papers published by our lab since 2016, and have been updating it since then to make the code shorter and more efficient.
+This script provides a series of codes to estimate the significance (P-value) of network-level metrics for a single network and for comparing two networks. We first wrote it to be used in a series of papers published by our lab since 2016, and have been updating it since then to make the code shorter and more efficient.
 
 
 ## List of files
