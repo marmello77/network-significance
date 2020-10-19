@@ -1,1 +1,20 @@
-	Pla01	Pla02	Pla03	Pla04	Pla06	Pla08	Pla09	Pla11	Pla12Pol01	673	0	0	0	0	0	0	0	0Pol02	0	154	0	67	0	0	0	0	0Pol03	110	0	0	0	6	0	0	0	0Pol04	0	0	0	0	0	0	2	0	0Pol07	0	5	0	5	4	0	0	0	0Pol08	0	7	0	0	0	0	0	0	0Pol09	0	1	0	0	2	0	3	0	1Pol10	0	3	0	0	0	0	0	0	0Pol13	0	8	0	0	0	0	0	1	0Pol14	4	1	0	0	0	0	0	0	0Pol17	0	1	0	0	0	0	0	0	0Pol19	0	0	0	0	0	8	0	0	0Pol20	0	0	0	0	0	1	0	0	0Pol21	0	4	0	0	3	0	0	0	0Pol23	1	0	15	0	0	0	0	0	0Pol25	0	0	0	0	0	2	0	0	0Pol26	0	0	0	0	0	0	0	0	3Pol27	0	4	0	0	0	0	0	0	0Pol28	0	0	0	0	0	9	0	0	0Pol29	0	1	0	0	0	0	0	0	0Pol33	0	6	0	0	0	0	0	0	0
+	Pilgou	Encspe	Gueang	Bauche	Helbar	Pilchr	Psemar	Ambcea	Asppyr	Ipomar	Lirsp	Crosp	Ceigla	Tocfor	Cerjam	Comsp	Pipsti	Ind1	Allsp	Anacol	Caesp	Schbra	Alisp	Ind2
+Glosor	23	22	0	10	34	27	24	0	0	8	24	4	4	0	0	0	2	0	0	0	0	0	0	0
+Lonmor	14	10	0	9	16	23	14	0	0	18	2	0	4	0	0	1	1	1	0	0	0	0	0	0
+Phydis	0	8	0	5	0	0	9	0	0	0	6	0	5	0	0	0	0	0	0	0	0	0	0	0
+Artpla	3	0	0	0	0	2	2	0	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0
+Calgri	13	0	26	3	0	0	0	8	13	2	0	11	0	0	0	6	4	1	3	1	0	2	0	1
+Eriell	20	9	28	18	5	0	0	3	15	0	0	11	1	3	0	0	1	0	0	0	2	0	1	0
+Eriswa	9	6	4	6	1	0	0	13	0	0	0	0	0	1	3	0	0	0	0	0	0	0	0	0
+Agrcin	7	0	0	2	3	0	0	0	0	4	2	0	0	2	5	0	0	2	0	0	0	0	0	0
+Eumvit	8	0	3	6	0	0	0	0	0	0	0	1	0	4	0	2	0	1	0	0	0	0	0	0
+Eumana	2	0	1	0	1	0	0	0	0	0	0	3	0	1	3	0	0	0	0	1	0	0	0	0
+Manrus	6	0	1	2	0	0	0	0	0	1	0	0	0	3	4	0	0	0	0	0	0	0	0	0
+Mansex	2	0	0	1	0	0	0	0	0	0	0	0	0	4	3	0	0	0	0	0	0	0	0	0
+Xylter	5	7	0	0	0	0	0	8	0	0	0	0	3	0	0	0	0	0	0	0	0	0	0	0
+Prostr	6	8	0	0	0	0	0	0	0	0	0	0	4	0	0	0	0	0	0	0	0	0	0	0
+Eriobs	2	0	0	0	0	0	0	0	0	1	0	0	2	0	0	0	0	0	0	0	0	0	0	0
+Aelsp	0	0	5	0	0	0	0	15	10	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Cocant	2	0	0	1	0	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Calpar	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0
+Psetet	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0

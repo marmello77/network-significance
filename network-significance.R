@@ -1,500 +1,342 @@
-############################################################
-#                                                          # 
-#    SCRIPT FOR ESTIMATING P-VALUES FOR NETWORK METRICS    #
-#                                                          # 
-############################################################
+################################################################################
+##### SCRIPT FOR ESTIMATING P-VALUES FOR NETWORK METRICS
+################################################################################
+
 
 ##### Ecological Synthesis Lab (SintECO)
 ##### https://marcomellolab.wordpress.com
 ##### Authors: Renata Muylaert, Pavel Dodonov & Marco Mello
 ##### E-mail: renatamuy@gmail.com
-##### How to cite: Muylaert RL, Dodonov P & Marco Mello. 2016. How to estimate P-values of network metrics and compare pairs of networks using Monte Carlo procedures. Ecological Synthesis Lab at the University of S??o Paulo, Brazil.
-##### Published on April 25th, 2017 (English version).
-##### Run in R 3.3.3 (2017-03-06) -- "Another Canoe"
-
-##### Disclaimer: You may use this script freely for non-comercial purposes at your own risk. We assume no responsibility or liability for the use of this software, convey no license or title under any patent, copyright, or mask work right to the product. We reserve the right to make changes in the software without notification. We also make no representation or warranty that such application will be suitable for the specified use without further testing or modification. If this script helps you produce any academic work (paper, book, chapter, dissertation etc.), please acknowledge the authors and cite the source.
+##### See README for further info:
+##### https://github.com/marmello77/network-significance/blob/master/README.md
 
 
-#############################################################
+################################################################################
+##### Summary
+################################################################################
 
 
-####SUMMARY##################################################
+#1. Get ready
+#2. P-value of a topology metric
+#3. P-value of a modularity metric
+#4. Comparing topology between two networks
+#5. Comparing modularity between two networks
 
 
-#1. Preparation
-#2. P-value for one network (Dormann)
-#3. P-value for one network (Muylaert & Dododonov)
-#4. P-value for QuanBiMo modularity
-#5. Comparing one metric between two networks
-#6. Comparing QuanBiMo between two networks
-#7. Suggested readings
+################################################################################
+##### 1. Get ready
+################################################################################
 
-
-#############################################################
-
-
-####1. PREPARATION##########################################
-
-
-#Load the packages.
-library(bipartite)
-library(reshape2)
-library(sna)
-library(igraph)
-library(network)
-library(tcltk)
-library(vegan)
-library(network)
 
 #Set the working directory
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-
-##############################################################
-
-
-####2. P-value for one network (Dormann)####
-
 #Delete all previous objects
 rm(list= ls())
 
-#Create the object to be analyzed
-data<-read.table("net1.txt", head=TRUE)
+#Load the packages
+library(bipartite)
+library(reshape2)
+library(tidyverse)
 
-#Calculate the desired metric for the original network (observed)
-obs <- unlist(networklevel(data, index="NODF"))
-obs
+#Import the data
+net1 <- as.matrix(read.delim("net1.txt", row.names=1))
+net2 <- as.matrix(read.delim("net2.txt", row.names=1))
 
-#Create randomized networks using a null model. 
-#(It may take long, depending on your computer's processing power)
-#The paramater "method" sets the null model and the parameter "N" sets the number of permutations
-nulls <- nullmodel(data, N=10, method=5, autotransform="equiprobable")
+#Inspect the networks
+class(net1)
+net1
+dim(net1)
+min(net1)
+max(net1)
 
-#Calculate the same metric for all randomized networks
-null <- unlist(sapply(nulls, networklevel, index="NODF")) 
-null
+class(net2)
+net2
+dim(net2)
+min(net2)
+max(net2)
+
+#Plot the matrices
+visweb(net1)
+visweb(net2)
+
+#Set the number of permutations to be used in all null model analyses
+#Permutations analysis is quite resource-demanding. Therefore, when setting
+#this number, take into account your computer's power and memory. 
+#When doing this kind of analysis for real in a paper, we use at least 1,000
+#permutations. Here we set this number lower just for testing the script.
+permutations <- 10
+
+#Set seed to allow reproducible results
+set.seed(14)
+
+#Generate randomized versions of each network using a null model
+nulls1 <- nullmodel(net1, 
+                    N=permutations, #Use the number set before
+                    method="vaznull") #You can choose a different null model
+
+nulls2 <- nullmodel(net2, 
+                    N=permutations, 
+                    method="vaznull")
+
+
+################################################################################
+##### 2. P-value of a topology metric
+################################################################################
+
+
+#Calculate a metric of your choice for the original network
+Nest <- networklevel(net1,
+                     index="NODF") #Choose any network-level metric
+
+#Check the value
+Nest
+
+#Calculate metric for the randomized networks
+randomized.Nest <- unlist(sapply(nulls1, networklevel, index="NODF"))
+(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z value
+Nest.sig <- sum(randomized.Nest>Nest)/length(randomized.Nest) # p value
 
 #Plot the observed value against the distribution of randomized values
-plot(density(null), xlim=c(min(obs, min(null)), max(obs, max(null))), 
-     main="Observed vs. randomized", xlab = "The chosen metric")
-abline(v=obs, col="red", lwd=2)    
+par(mar = c(4,4,5,4))
+plot(density(randomized.Nest), main="Observed vs. randomized",
+     xlim=c(min((Nest), min(randomized.Nest)), 
+            max((Nest), max(randomized.Nest))))
+abline(v=Nest, col="red", lwd=2, xlab="")
 
-#Estimate the P-value
-mean(null)
-sd(null)
-obs
-praw <- sum(null>obs) / length(null)
-ifelse(praw > 0.5, 1-praw, praw)    # P-value
-
-
-#########################################################################
-
-
-####3. P-value for one network (Muylaert & Dododonov)####
+Nest #observed value
+mean(randomized.Nest) #randomized mean
+sd(randomized.Nest) #randomized SD
+(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z-value
+sum(randomized.Nest>(Nest)) / length(randomized.Nest) #P randomized > observed
+sum(randomized.Nest<(Nest)) / length(randomized.Nest) #P randomized < observed
 
 
-#Patefield (1981) null model
+################################################################################
+##### 3. P-value of a modularity metric
+################################################################################
 
-#Delete all previous objects
-rm(list= ls())
 
-#Create the object to be analyzed
-data<-read.table("net1.txt", head=TRUE)
-data_neo=as.matrix(data)
-data_neo
+#Modularity needs a slightly different code because it uses a different function
+#from the package bipartite.
 
-#Choose the metric
-metrics=c("H2") 
+#Choose the modularity algorithm
+algorithm=c("Beckett") #this is the DIRTLPAwb+ algorithm
 
-#Save the observed value
-orig=networklevel(data_neo, index=metrics)
-orig
-real<-data.frame(orig)
-real
+#Calculate modularity for the original network
+Mod <- computeModules(net1, 
+                      method = algorithm) #in this case DIRTLPAwb+
 
-#Create the randomized networks. It is advised to set to at least 999.
-#(It may take long, depending on your computer's processing power)
-Nperm = 9
-randomized.patef=matrix(nrow=length(orig),ncol=Nperm+1)
-row.names(randomized.patef)=names(orig)
-randomized.patef[,1]=orig 
+#Check the value
+Mod@likelihood
 
-#Repeat the procedure in a loop
-i<-1
-while(i<=Nperm){ 
+#Extract module membership
+Part <- bipartite::module2constraints(Mod)
+row.Part <- Part[1:nrow(net1)]
+col.Part <- Part[(nrow(net1)+1):(nrow(net1)+ncol(net1))]
 
-  data_aleat=permatfull(data_neo,fixedmar="both",mtype="count",times=1)
-  
-  data_aleat=data_aleat$perm[[1]]
-  
-  linha<-networklevel(data_aleat, index=metrics)
-  
-  randomized.patef[,i+1]=linha
-  print(i)
-	i=i+1
-}
- randomized.patef
+#Calculate metric for the randomized networks
+nullmod <- sapply(nulls1, computeModules, method = algorithm)
+modnull <- sapply(nullmod, function(x) x@likelihood)
+(Mod@likelihood - mean(modnull))/sd(modnull) # Z value
+Mod.sig <- sum(modnull>(Mod@likelihood)) / length(modnull) # p value
 
 #Plot the observed value against the distribution of randomized values
-niveis<-row.names(randomized.patef)
-for(k in niveis)
-	{
-		if(any(is.na(randomized.patef[k,]) == TRUE))
-			{
-			print(c(k, "metrica tem NA"))
-			} else {
-	nome.arq<- paste("Patefield_null_",k,".png", sep="")
-	png(filename= nome.arq, res= 300, height= 15, width=21, unit="cm")
-	plot(density(randomized.patef[k,]), main="Observed vs. randomized",)
-	abline(v=orig[k], col="red", lwd=2, xlab="")
-	dev.off()
-	print(k)
-	nome.arq<- paste("Patefield_Null_mean_sd_",k,".txt", sep="")
-	write.table(cbind(mean(randomized.patef[k,]),sd(randomized.patef[k,])), file=paste(nome.arq,sep=""), 
-      sep=" ",row.names=TRUE,col.names=FALSE)
-		}
-	}
+par(mar = c(4,4,5,4))
+plot(density(modnull), main="Observed vs. randomized",
+     xlim=c(min((Mod@likelihood), min(modnull)), 
+            max((Mod@likelihood), max(modnull))))
+abline(v=Mod@likelihood, col="red", lwd=2, xlab="")
 
-#Estimate the P-value
-significance.patef=matrix(nrow=nrow(randomized.patef),ncol=3)
-row.names(significance.patef)=row.names(randomized.patef)
-colnames(significance.patef)=c("p (rand <= orig)", "p (rand >= orig)", "p (rand=orig)")
-
-signif.sup=function(x) sum(x>=x[1])/length(x)
-signif.inf=function(x) sum(x<=x[1])/length(x)
-signif.two=function(x) ifelse(min(x)*2>1,1,min(x)*2)
-
-significance.patef[,1]=apply(randomized.patef,1,signif.inf)
-significance.patef[,2]=apply(randomized.patef,1,signif.sup)
-significance.patef[,3]=apply(significance.patef[,-3],1,signif.two)
-
-significance.patef
+Mod@likelihood #observed value
+mean(modnull) #randomized mean
+sd(modnull) #randomized SD
+(Mod@likelihood - mean(modnull))/sd(modnull) # Z-value
+sum(modnull>(Mod@likelihood)) / length(modnull) #P randomized > observed
+sum(modnull<(Mod@likelihood)) / length(modnull) #P randomized < observed
 
 
-
-##############################################################
-
-
-####4. P-value for QuanBiMo modularity####
-
-#Dormann & Strauss (2014)
-
-#Delete all previous objects
-rm(list= ls())
-
-#Create the object to be analyzed
-data<-read.table("net1.txt", head=TRUE)
-data
-
-#Run the QuanBiMo algorithm
-mod <- computeModules(web=data, steps=1E6)
-mod
-
-#Show the M-value (modularity)
-mod@likelihood
-
-#Export the matrix with modules
-file_name= paste("Modulos_Quanbimo.png", sep="")
-png(filename= file_name, res= 300, height= 25, width=30, unit="cm")
-plotModuleWeb(mod)
-dev.off()
+################################################################################
+##### 4. Comparing topology between two networks
+################################################################################
 
 
-#Calculate hierarchical modules
-modn <- computeModules(data, steps=1E6, deep=T) 
+#Use the same two networks imported before
+net1
+net2
 
-#Estimate the P-value using the Patefield (1981) algorithm
-nulls <- nullmodel(data, N=999, method="r2d")
-modules.nulls <- sapply(nulls, computeModules)
-like.nulls <- sapply(modules.nulls, function(x) x@likelihood)
-(z <- (mod@likelihood - mean(like.nulls))/sd(like.nulls))
-czvalues(mod) # for all nodes
-czvalues(mod, level="lower") # for rows
-czvalues(mod, level="lower", weighted=TRUE) #based on edge weights
+#Choose the network-level metric
+metrics=c("NODF")
 
-#Plot the observed value against the distribution of randomized values
-plot(density(like.nulls), xlim=c(min((mod@likelihood), min(like.nulls)), max((mod@likelihood), max(like.nulls))), 
-     main="Observed vs. randomized")
-abline(v=(mod@likelihood), col="red", lwd=2)    
+#Calculate the difference in the chosen metric between the observed networks
+orig1 = abs(networklevel(net1,index=metrics)
+         -networklevel(net2,index=metrics))
 
-#Estimate the P-value
-mean(like.nulls)
-sd(like.nulls)
-mod@likelihood
-praw <- sum(like.nulls>(mod@likelihood)) / length(like.nulls)
-ifelse(praw > 0.5, 1-praw, praw)
+#Check the difference
+orig1
 
+#Calculate the difference between pairs of randomized networks
+randomized1=matrix(nrow=length(orig1),ncol=permutations+1)
+row.names(randomized1)=names(orig1)
+randomized1[,1]=orig1
+randomized1
 
-##########################################################
-
-
-####5. Comparing one metric between two networks####
-
-#Patefield (1981) null model
-#(It may take long, depending on your computer's processing power)
-
-
-#Delete all previous objects
-rm(list= ls())
-
-#Load the two networks as objects
-data<-read.table("net1.txt", head=TRUE)
-data
-data2<-read.table("net2.txt", head=TRUE)
-data2
-data_neo=as.matrix(data)
-data_neo
-data2_neo=as.matrix(data2)
-data2_neo
-
-#Choose the metric
-metrics=c("H2")
-metrics
-
-#Calculate the difference in the chosen metrics between pairs of randomized networks
-orig=abs(networklevel(data_neo,index=metrics)-networklevel(data2_neo,index=metrics))
-orig
-
-#Calculate the difference in the chosen metrics between pairs of randomized networks
-Nperm = 999
 i=1
-randomized.patef=matrix(nrow=length(orig),ncol=Nperm+1)
-row.names(randomized.patef)=names(orig)
-randomized.patef[,1]=orig
 
-while(i <=Nperm){ 
+while(i <= permutations){ 
   
-  data_aleat=permatfull(data_neo,fixedmar="both",mtype="count",times=1)
-  data_aleat=data_aleat$perm[[1]]
-  data2_aleat=permatfull(data2_neo,fixedmar="both",mtype="count",times=1)
-  data2_aleat=data2_aleat$perm[[1]]
-  linha<-abs(networklevel(data_aleat, index=metrics)-networklevel(data2_aleat, index=metrics))
-  randomized.patef[,i+1]=linha
+  net_rand1=permatfull(net1,fixedmar="both",mtype="count",times=1)
+  net_rand1=net_rand1$perm[[1]]
+  net_rand2=permatfull(net2,fixedmar="both",mtype="count",times=1)
+  net_rand2=net_rand2$perm[[1]]
+  lines<-abs(networklevel(net_rand1, index=metrics)-networklevel(net_rand2, index=metrics))
+  randomized1[,i+1]=lines
   print(i)
   i=i+1
   
 } 
 
-randomized.patef
+randomized1
 
-#Plot the observed difference against the distribution of randomized pairwise differences
-niveis<-row.names(randomized.patef)
-for(k in niveis)
-	{
-		if(any(is.na(randomized.patef[k,]) == TRUE))
+#Plot the observed difference against the distribution of randomized differences
+levels<-row.names(randomized1)
+for(k in levels){
+		if(any(is.na(randomized1[k,]) == TRUE))
 			{
 			print("k tem NA")
 			} else {
-	nome.arq<- paste("Hist_DIFERENCES_patef_null_",k,".png", sep="")
-	png(filename= nome.arq, res= 300, height= 15, width=21, unit="cm")
-	plot(density(randomized.patef[k,]), main="Observed vs. randomized",)
-	abline(v=orig[k], col="red", lwd=2, xlab="")
-	dev.off()
-	print(k)
-	nome.arq<- paste("DIFERENCES_patef_Null_mean_sd_",k,".txt", sep="")
-	write.table(cbind(mean(randomized.patef[k,]),sd(randomized.patef[k,])), file=paste(nome.arq,sep=""), 
-      sep=" ",row.names=TRUE,col.names=FALSE)
+	plot(density(randomized1[k,]), main="Observed vs. randomized",)
+	abline(v=orig1[k], col="red", lwd=2, xlab="")
 		}
 	}
 
-
 #Estimate the P-value
-significance.patef=matrix(nrow=nrow(randomized.patef),ncol=3)
-row.names(significance.patef)=row.names(randomized.patef)
-colnames(significance.patef)=c("p (rand <= orig)", "p (rand >= orig)", "p (rand=orig)")
-
-signif.sup=function(x) sum(x>=x[1])/length(x)
-signif.inf=function(x) sum(x<=x[1])/length(x)
-signif.two=function(x) ifelse(min(x)*2>1,1,min(x)*2)
-
-significance.patef[,1]=apply(randomized.patef,1,signif.inf)
-significance.patef[,2]=apply(randomized.patef,1,signif.sup)
-significance.patef[,3]=apply(significance.patef[,-3],1,signif.two)
-
-significance.patef
+orig1 #observed difference
+mean(randomized1) #mean randomized differences
+sd(randomized1) #SD randomized differences
+(orig1 - mean(randomized1))/sd(randomized1) # Z-value
+sum(randomized1>(orig1)) / length(randomized1) #P randomized > observed
+sum(randomized1<(orig1)) / length(randomized1) #P randomized < observed
 
 
+################################################################################
+##### 5. Comparing modularity between two networks
+################################################################################
 
-##############################################################
 
+#Use the same two networks imported before
+net1
+net2
 
-####6. Comparing QuanBiMo between two networks####
+#Choose the modularity algorithm
+algorithm=c("Beckett") #this is the DIRTLPAwb+ algorithm
 
-#Patefield (1981) null model
-#(It may take long, depending on your computer's processing power)
+#Calculate modularity for the original networks
+mod1 <- computeModules(net1, 
+                      method = algorithm) 
+mod2 <- computeModules(net2, 
+                       method = algorithm)
 
-#Delete all previous objects
-rm(list= ls())
+#Use the same randomized versions created before
+nulls1
+nulls2
 
-#Create the objects
-data<-read.table("net1.txt", head=TRUE)
-data2<-read.table("net2.txt", head=TRUE)
-data_neo=as.matrix(data)
-data_neo
-data2_neo=as.matrix(data2)
-data2_neo
-
-#Calculate QuanBiMo with standarized Q-values (z-values)
-mod1 <- computeModules(web=data, steps=1E6)
-mod2 <- computeModules(web=data2, steps=1E6)
-
-#Standardize the Q-value of net1 and choose the number of permutations
-nulls1 <- nullmodel(data, N=999, method="r2d")
-modules.nulls1 <- sapply(nulls1, computeModules)
+#Standardize the Q-value (modularity)
+modules.nulls1 <- sapply(nulls1, computeModules,  method = algorithm)
 like.nulls1 <- sapply(modules.nulls1, function(x) x@likelihood)
 mod_val1<- (mod1@likelihood - mean(like.nulls1))/sd(like.nulls1)
 mod_val1
 
-#Standardize the Q-value of net2 and choose the number of permutations
-nulls2 <- nullmodel(data2, N=999, method="r2d")
-modules.nulls2 <- sapply(nulls2, computeModules)
+modules.nulls2 <- sapply(nulls2, computeModules,  method = algorithm)
 like.nulls2 <- sapply(modules.nulls2, function(x) x@likelihood)
 mod_val2<- (mod2@likelihood - mean(like.nulls2))/sd(like.nulls2)
 mod_val2
 
 #As the Q-values are standardized, values higher than 2 are usually
-#significant To estimate the P-value, do a simple Monte Carlo count 
-#or run a z-test.
+#significant. To estimate the P-value, do a simple Monte Carlo count.
 
- 
 #Calculate the difference in standardized Q-values between the two networks
-orig = abs(mod_val1-mod_val2)
-orig
-
-names(orig)<- "Diferenca em Q padronizado"
+orig2 = abs(mod_val1-mod_val2)
+names(orig2)<- "Difference in standardized Q"
+orig2
 
 #Calculate the difference in the chosen metrics between pairs of randomized networks
-Nperm = 999 
+randomized2=matrix(nrow=length(orig2),ncol=permutations+1)
+row.names(randomized2)=names(orig2)
+randomized2[,1]=orig2
+randomized2<- as.matrix(randomized2)
+randomized2
 
-randomized.patef=matrix(nrow=length(orig),ncol=Nperm+1)
-row.names(randomized.patef)=names(orig)
-randomized.patef[,1]=orig
-
-randomized.patef<- as.matrix(randomized.patef)
 i<-1
 
-while (i<=Nperm){ 
-	data_aleat=permatfull(data_neo,fixedmar="both",mtype="count",times=1)
-	data_aleat=data_aleat$perm[[1]]
-	data2_aleat=permatfull(data2_neo,fixedmar="both",mtype="count",times=1)
-	data2_aleat=data2_aleat$perm[[1]]
-	#data_aleat<- as.matrix(data_aleat)
-	#data2_aleat<- as.matrix(data2_aleat)
-	print("passou")
-	mod1_aleat <- try(computeModules(web=data_aleat, steps=1E6)) #1E6 no minimo quando for pra valer
+while (i<=permutations){ 
+	net_rand1=permatfull(net1,fixedmar="both",mtype="count",times=1)
+	net_rand1=net_rand1$perm[[1]]
+	
+	net_rand2=permatfull(net2,fixedmar="both",mtype="count",times=1)
+	net_rand2=net_rand2$perm[[1]]
+
+	print("passed")
+	mod1_rand <- try(computeModules(net_rand1, method = algorithm))
 	print("mod 1")
 	print(i)
-	mod2_aleat <- try(computeModules(web=data2_aleat, steps=1E6)) #1E6
 	
-	print("mod 2 GO GO GO")
+	mod2_rand <- try(computeModules(net_rand2, method = algorithm))
+	print("mod 2")
 	print(i)
-	nulls1_aleat <- nullmodel(data_aleat, N=9, method="r2d")
- 	modules.nulls1_aleat <- sapply(nulls1_aleat, computeModules)
- 	print("passed nulls aleat1")
-	like.nulls1_aleat <- sapply(modules.nulls1, function(x) x@likelihood)
-
-	mod_val1_aleat<- (mod1@likelihood - mean(like.nulls1_aleat))/sd(like.nulls1_aleat)
-	#net 2
- 	nulls2 <- nullmodel(data2_aleat, N=9, method="r2d")
- 	modules.nulls2_aleat <- sapply(nulls2, computeModules)
-	print("passed nulls aleat2") 
-	like.nulls2_aleat <- sapply(modules.nulls2_aleat, function(x) x@likelihood)
-	mod_val2_aleat<- (mod2@likelihood - mean(like.nulls2_aleat))/sd(like.nulls2_aleat)
 	
-	print("passed TRY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-		
-	linha<-abs(mod_val1_aleat-mod_val2_aleat)
+	nulls1_rand <- nullmodel(net_rand1, N=permutations, method="vaznull")
+ 	modules.nulls1_rand <- sapply(nulls1_rand, 
+ 	                              computeModules, method = algorithm)
+ 	print("passed nulls rand1")
+	like.nulls1_rand <- sapply(modules.nulls1, function(x) x@likelihood)
+	mod_val1_rand<- (mod1@likelihood - 
+	                     mean(like.nulls1_rand))/sd(like.nulls1_rand)
 
-	randomized.patef[,i+1]=linha
+	nulls2_rand <- nullmodel(net_rand1, N=permutations, method="vaznull")
+	modules.nulls2_rand <- sapply(nulls2_rand, 
+	                              computeModules, method = algorithm)
+	print("passed nulls rand2")
+	like.nulls2_rand <- sapply(modules.nulls1, function(x) x@likelihood)
+	mod_val1_rand<- (mod1@likelihood - 
+	                     mean(like.nulls2_rand))/sd(like.nulls2_rand)
+	
+	print("passed TRY")
+		
+	lines<-abs(mod_val1_rand-mod_val2_rand)
+
+	randomized2[,i+1]=lines
 	
 	print(i)
 	print(Sys.time())
 	i<-i+1
-	nome<- paste("RANDOMIZED_values_MOD_patef_sink","_",i,".txt")
-	sink(nome)
-	cat(randomized.patef)
-	sink()
+	name<- paste("RANDOMIZED_values_MOD_patef_sink","_",i,".txt")
 	} 
 
 nometxt<- paste("RANDOMIZED_values_MOD_Patefield_TXT","_",i,".txt")
-write.table(randomized.patef,nometxt, sep="\t", quote=F)
 nometxt
 
-
 #Plot the observed difference against the distribution of randomized pairwise differences
-niveis<-row.names(randomized.patef)
-for(k in niveis)
+levels<-row.names(randomized2)
+for(k in levels)
 	{
-		if(any(is.na(randomized.patef[k,]) == TRUE))
+		if(any(is.na(randomized2[k,]) == TRUE))
 			{
 			print("k tem NA")
 			} else {
-	nome.arq<- paste("Hist_DIFERENCES_Quanbimo_null_",k,".png", sep="")
-	png(filename= nome.arq, res= 300, height= 15, width=21, unit="cm")
-	plot(density(randomized.patef[k,]), main="Observed vs. randomized",)
-	abline(v=orig[k], col="red", lwd=2, xlab="")
-	dev.off()
-	print(k)
-	nome.arq<- paste("DIFERENCES_patef_Null_mean_sd_QuanBiMo",k,".txt", sep="")
-	write.table(cbind(mean(randomized.patef[k,]),sd(randomized.patef[k,])), file=paste(nome.arq,sep=""), 
-      sep=" ",row.names=TRUE,col.names=FALSE)
+	plot(density(randomized2[k,]), main="Observed vs. randomized",)
+	abline(v=orig2[k], col="red", lwd=2, xlab="")
 		}
 	}
 
 #Estimate the P-value
-randomized.patef
-
-significance.patef=matrix(nrow=nrow(randomized.patef),ncol=3)
-row.names(significance.patef)=row.names(randomized.patef)
-colnames(significance.patef)=c("p (rand <= orig)", "p (rand >= orig)", "p (rand=orig)")
-
-signif.sup=function(x) sum(x>=x[1])/length(x) #unicaudal
-signif.inf=function(x) sum(x<=x[1])/length(x) #unicaudal
-signif.two=function(x) ifelse(min(x)*2>1,1,min(x)*2)#bicaudal
-
-significance.patef[,1]=apply(randomized.patef,1,signif.inf)
-significance.patef[,2]=apply(randomized.patef,1,signif.sup)
-
-significance.patef2<-data.frame(significance.patef)
-significance.patef2[,3]=apply(significance.patef2[,-3],1,signif.two)
-colnames(significance.patef2)=c("p (rand <= orig)", "p (rand >= orig)", "p (rand=orig)")
-
-significance.patef2
+orig2 #observed difference
+mean(randomized2) #mean randomized differences
+sd(randomized2) #SD randomized differences
+(orig2 - mean(randomized2))/sd(randomized2) # Z-value
+sum(randomized2>(orig2)) / length(randomized2) #P randomized > observed
+sum(randomized2<(orig2)) / length(randomized2) #P randomized < observed
 
 
-
-
-#########################################################################
-#######################BE HAPPY :)#######################################
-	
-####7. Suggested readings##################################
-
-#Barabasi, A.-L. (2016) Network Science, 1st ed. Cambridge University
- #Press, Cambridge.
-
-#Bascompte, J. & Jordano, P. (2014) Mutualistic Networks, 1st ed. Princeton
- #University Press, Princeton.
-
-#Bascompte, J., Jordano, P., Melian, C.J. & Olesen, J.M. (2003) The nested assembly
-	#of plant-animal mutualistic networks. Proceedings of the National Academy
-	#of Sciences of the United States of America, 100, 9383???9387.
-
-#Bezerra, E.L.S., Machado, I.C. & Mello, M.A.R. (2009) Pollination networks of
-  #oil-flowers: a tiny world within the smallest of all worlds. Journal of Animal
-  #Ecology, 78, 1096???101.
-  #Fonte da net1 do exemplo (Catimbau).
-
-#Blondel, V.D., Guillaume, J.-L., Lambiotte, R. & Lefebvre, E. (2008) Fast 
-	#unfolding of communities in large networks. Journal of Statistical Mechanics:
-	#Theory and Experiment, 2008, P10008.
-
-#Dormann, C.F. & Strauss, R. (2014) A method for detecting modules in quantitative
-	#bipartite networks (ed P Peres-Neto). Methods in Ecology and Evolution, 5, 90???98.
-
-#Patefield, W.M. 1981. Algorithm AS159. An efficient method of generating
-	#r x c tables with given row and column totals. Applied Statistics 30, 91-97.
-
-#Vazquez, D.P. & Simberloff, D. 2003. Changes in interaction biodiversity
-  #induced by an introduced ungulate. Ecology Letters, 6, 1077-1083.
-  #Fonte da net2 do exemplo (Safariland, parcial).
+#################################### END #######################################
 
