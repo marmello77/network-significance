@@ -57,14 +57,14 @@ We thank our sponsors, especially the Alexander von Humboldt-Stiftung, CNPq, CAP
 
 If you want to understand the concepts used in our script, read the following works:
 
-* Beckett, S. J. (2016). Improved community detection in weighted bipartite networks. Royal Society Open Science, 3(1), 140536. doi: 10.1098/rsos.140536
+* Beckett, S. J. (2016). [Improved community detection in weighted bipartite networks](https://doi.org/10.1098/rsos.140536). Royal Society Open Science, 3(1), 140536.
 
-* Blüthgen, N., Menzel, F., Hovestadt, T., Fiala, B., & Bluthgen, N. (2007). Specialization, constraints, and conflicting interests in mutualistic networks. Current Biology, 17(4), 341–346. doi: DOI 10.1016/j.cub.2006.12.039
+* Blüthgen, N., Menzel, F., Hovestadt, T., Fiala, B., & Bluthgen, N. (2007). [Specialization, constraints, and conflicting interests in mutualistic networks](https://doi.org/10.1016/j.cub.2006.12.039). Current Biology, 17(4), 341–346.
 
-* Felix, G. M., Pinheiro, R. B. P., Poulin, R., Krasnov, B. R., & Mello, M. A. R. (2017). The compound topology of a continent-wide interaction network explained by an integrative hypothesis of specialization. BioRxiv, 236687. doi: 10.1101/236687
+* Felix, G. M., Pinheiro, R. B. P., Poulin, R., Krasnov, B. R., & Mello, M. A. R. (2017). [The compound topology of a continent-wide interaction network explained by an integrative hypothesis of specialization](https://doi.org/10.1101/236687). BioRxiv, 236687.
 
-* Mello, M. A. R., Felix, G. M., Pinheiro, R. B. P., Muylaert, R. L., Geiselman, C., Santana, S. E., … Stevens, R. D. (2019). Insights into the assembly rules of a continent-wide multilayer network. Nature Ecology & Evolution, 3(11), 1525–1532. doi: 10.1038/s41559-019-1002-3
+* Mello, M. A. R., Felix, G. M., Pinheiro, R. B. P., Muylaert, R. L., Geiselman, C., Santana, S. E., … Stevens, R. D. (2019). [Insights into the assembly rules of a continent-wide multilayer network](https://doi.org/10.1038/s41559-019-1002-3). Nature Ecology & Evolution, 3(11), 1525–1532.
 
-* Pinheiro, R. B. P., Felix, G. M. F., Dormann, C. F., & Mello, M. A. R. (2019). A new model explaining the origin of different topologies in interaction networks. Ecology, 100(9), e02796. doi: 10.1002/ecy.2796
+* Pinheiro, R. B. P., Felix, G. M. F., Dormann, C. F., & Mello, M. A. R. (2019). [A new model explaining the origin of different topologies in interaction networks](https://doi.org/10.1002/ecy.2796). Ecology, 100(9), e02796.
 
-* Ulrich, W., Almeida-Neto, M., & Gotelli, N. J. (2009). A consumer’s guide to nestedness analysis. Oikos, 118(1), 3–17. doi: 10.1111/j.1600-0706.2008.17053.x
+* Ulrich, W., Almeida-Neto, M., & Gotelli, N. J. (2009). [A consumer’s guide to nestedness analysis](https://doi.org/10.1111/j.1600-0706.2008.17053.x). Oikos, 118(1), 3–17.
