@@ -61,6 +61,8 @@ If you want to understand the concepts used in our script, read the following wo
 
 * Blüthgen, N., Menzel, F., Hovestadt, T., Fiala, B., & Bluthgen, N. (2007). [Specialization, constraints, and conflicting interests in mutualistic networks](https://doi.org/10.1016/j.cub.2006.12.039). Current Biology, 17(4), 341–346.
 
+* Dormann, C. F., Gruber, B., & Fründ, J. (2008). [Introducing the bipartite package: analyzing ecological networks](https://www.uni-goettingen.de/de/document/download/96729eb9d30a6f2dc4403df15854305c.pdf/Rnews2008,8_8-11_open.pdf). R News, 8(2), 8–11.
+
 * Felix, G. M., Pinheiro, R. B. P., Poulin, R., Krasnov, B. R., & Mello, M. A. R. (2017). [The compound topology of a continent-wide interaction network explained by an integrative hypothesis of specialization](https://doi.org/10.1101/236687). BioRxiv, 236687.
 
 * Mello, M. A. R., Felix, G. M., Pinheiro, R. B. P., Muylaert, R. L., Geiselman, C., Santana, S. E., … Stevens, R. D. (2019). [Insights into the assembly rules of a continent-wide multilayer network](https://doi.org/10.1038/s41559-019-1002-3). Nature Ecology & Evolution, 3(11), 1525–1532.
