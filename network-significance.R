@@ -60,8 +60,8 @@ max(net2)
 visweb(net1)
 visweb(net2)
 
-#Set the number of permutations to be used in all null model analyses
-#Permutations analysis is quite resource-demanding. Therefore, when setting
+#Set the number of permutations to be used in all permutation analyses.
+#Permutation is quite resource-demanding. Therefore, when setting
 #this number, take into account your computer's power and memory. 
 #When doing this kind of analysis for real in a paper, we use at least 1,000
 #permutations. Here we set this number lower just for testing the script.
@@ -210,6 +210,9 @@ sum(diff.rand<(diff)) / length(diff.rand) #P randomized < observed
 ################################################################################
 
 
+#Modularity needs a slightly different code because it uses a different function
+#from the package bipartite.
+                  
 #Choose the modularity algorithm to be passed as an argument to all functions
 algorithm=c("Beckett") #an example using the DIRTLPAwb+ algorithm
 
