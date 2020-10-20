@@ -223,7 +223,7 @@ algorithm=c("Beckett") #an example using the DIRTLPAwb+ algorithm
 mod1 <- computeModules(net1, 
                        method = algorithm)
 mod2 <- computeModules(net2, 
-                       method = algorithm) #in this case DIRTLPAwb+
+                       method = algorithm)
 
 #Check the values
 mod1@likelihood #modularity
