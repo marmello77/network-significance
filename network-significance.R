@@ -256,7 +256,7 @@ diff.rand <- abs(mod1null - mod2null)
 
 #Plot the observed value against the distribution of randomized values
 par(mar = c(4,4,5,4))
-plot(density(diff.rand), main="Observed vs. randomized",
+plot(density(diff.rand), main="Observed vs. randomized (pairwise differences)",
      xlim=c(min((diff), min(diff.rand)), 
             max((diff), max(diff.rand))))
 abline(v=diff, col="red", lwd=2, xlab="")
