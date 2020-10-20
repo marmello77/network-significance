@@ -19,7 +19,35 @@ Disclaimer: You may use this software freely for any purposes at your own risk. 
 
 ## Functionality and origin
 
-This script provides a series of codes to estimate the significance (P-value) of network-level metrics for a single network and for comparing two networks. We first wrote it to be used in a series of papers published by our lab since 2016, and have been updating it since then to make the code shorter and more efficient.
+This script provides a series of codes to estimate the significance (P-value) of a network-level metric calculated for a single network and the significance of a difference in a metric between two networks. These tasks are carried out using Monte Carlo procedures. 
+
+In a nutshell, you follow these steps to estimate the P-value of a metric calculated for one network:
+
+1. Calculate a network-level metric for the original network;
+
+2. Create N randomized versions of the original network using a null model to guide the permutations;
+
+3. Calculate the same network-level metric for all randomized networks;
+
+4. Compare the score calculated for the original network against the distribution of randomized scores.
+
+
+When comparing a given network-level metric between two networks, you follow these steps:
+
+1. Calculate a network-level metric for both original networks;
+
+2. Calculate the absolute difference in this metric between the two networks;
+
+3. Create N randomized versions of the two original networks using a null model to guide the permutations;
+
+4. Calculate the same network-level metric for all randomized networks;
+
+5. Calculate pairwise absolute differences in this metric between the randomized versions of the two networks;
+
+6. Compare the difference calculated for the two original networks against the distribution of randomized differences.
+
+
+We first wrote this script to be used in a series of papers published by our lab since 2016, and since then we have been updating it to make the code shorter, faster, and easier to use.
 
 
 ## List of files
