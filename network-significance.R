@@ -1,5 +1,5 @@
 ################################################################################
-##### SCRIPT FOR ESTIMATING P-VALUES FOR NETWORK METRICS
+##### SCRIPT FOR ESTIMATING P-VALUES OF NETWORK METRICS
 ################################################################################
 
 
