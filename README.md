@@ -47,7 +47,7 @@ When comparing a given network-level metric between two networks, you follow the
 6. Compare the difference calculated for the two original networks against the distribution of randomized differences.
 
 
-We first wrote this script to be used in a series of papers published by our lab since 2016, and since then we have been updating it to make the code shorter, faster, and easier to use.
+We first wrote this script to be used in a [paper about species interactions](https://doi.org/10.1371/journal.pone.0167161). Then we have used it in several papers published by our lab. Since its debut we have been updating this script to make the code shorter, faster, and easier to use.
 
 
 ## List of files
