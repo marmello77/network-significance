@@ -86,30 +86,28 @@ nulls2 <- nullmodel(net2,
 
 
 #Calculate a metric of your choice for the original network
-Nest <- networklevel(net1,
-                     index="NODF") #Choose any network-level metric
+metric <- networklevel(net1,
+                     index="NODF") #an example using binary NODF
 
 #Check the value
-Nest
+metric
 
 #Calculate metric for the randomized networks
-randomized.Nest <- unlist(sapply(nulls1, networklevel, index="NODF"))
-(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z value
-Nest.sig <- sum(randomized.Nest>Nest)/length(randomized.Nest) # p value
+randomized.metric <- unlist(sapply(nulls1, networklevel, index="NODF"))
 
 #Plot the observed value against the distribution of randomized values
 par(mar = c(4,4,5,4))
-plot(density(randomized.Nest), main="Observed vs. randomized",
-     xlim=c(min((Nest), min(randomized.Nest)), 
-            max((Nest), max(randomized.Nest))))
-abline(v=Nest, col="red", lwd=2, xlab="")
+plot(density(randomized.metric), main="Observed vs. randomized",
+     xlim=c(min((metric), min(randomized.metric)), 
+            max((metric), max(randomized.metric))))
+abline(v=metric, col="red", lwd=2, xlab="")
 
-Nest #observed value
-mean(randomized.Nest) #randomized mean
-sd(randomized.Nest) #randomized SD
-(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z-value
-sum(randomized.Nest>(Nest)) / length(randomized.Nest) #P randomized > observed
-sum(randomized.Nest<(Nest)) / length(randomized.Nest) #P randomized < observed
+metric #observed value
+mean(randomized.metric) #randomized mean
+sd(randomized.metric) #randomized SD
+(metric - mean(randomized.metric))/sd(randomized.metric) # Z-value
+sum(randomized.metric>(metric)) / length(randomized.metric) #P randomized > observed
+sum(randomized.metric<(metric)) / length(randomized.metric) #P randomized < observed
 
 
 ################################################################################
@@ -120,40 +118,39 @@ sum(randomized.Nest<(Nest)) / length(randomized.Nest) #P randomized < observed
 #Modularity needs a slightly different code because it uses a different function
 #from the package bipartite.
 
-#Choose the modularity algorithm
-algorithm=c("Beckett") #this is the DIRTLPAwb+ algorithm
+#Choose the modularity algorithm to be passed as an argument to all functions
+algorithm=c("Beckett") #an example usingthe DIRTLPAwb+ algorithm
 
 #Calculate modularity for the original network
-Mod <- computeModules(net1, 
-                      method = algorithm) #in this case DIRTLPAwb+
+mod <- computeModules(net1, 
+                      method = algorithm) 
 
 #Check the value
-Mod@likelihood
+mod@likelihood
 
 #Extract module membership
-Part <- bipartite::module2constraints(Mod)
-row.Part <- Part[1:nrow(net1)]
-col.Part <- Part[(nrow(net1)+1):(nrow(net1)+ncol(net1))]
+part <- bipartite::module2constraints(mod)
+row.part <- part[1:nrow(net1)]
+col.part <- part[(nrow(net1)+1):(nrow(net1)+ncol(net1))]
+length(unique((part))) #number of modules
 
 #Calculate metric for the randomized networks
 nullmod <- sapply(nulls1, computeModules, method = algorithm)
 modnull <- sapply(nullmod, function(x) x@likelihood)
-(Mod@likelihood - mean(modnull))/sd(modnull) # Z value
-Mod.sig <- sum(modnull>(Mod@likelihood)) / length(modnull) # p value
 
 #Plot the observed value against the distribution of randomized values
 par(mar = c(4,4,5,4))
 plot(density(modnull), main="Observed vs. randomized",
-     xlim=c(min((Mod@likelihood), min(modnull)), 
-            max((Mod@likelihood), max(modnull))))
-abline(v=Mod@likelihood, col="red", lwd=2, xlab="")
+     xlim=c(min((mod@likelihood), min(modnull)), 
+            max((mod@likelihood), max(modnull))))
+abline(v=mod@likelihood, col="red", lwd=2, xlab="")
 
-Mod@likelihood #observed value
+mod@likelihood #observed value
 mean(modnull) #randomized mean
 sd(modnull) #randomized SD
-(Mod@likelihood - mean(modnull))/sd(modnull) # Z-value
-sum(modnull>(Mod@likelihood)) / length(modnull) #P randomized > observed
-sum(modnull<(Mod@likelihood)) / length(modnull) #P randomized < observed
+(mod@likelihood - mean(modnull))/sd(modnull) # Z-value
+sum(modnull>(mod@likelihood)) / length(modnull) #P randomized > observed
+sum(modnull<(mod@likelihood)) / length(modnull) #P randomized < observed
 
 
 ################################################################################
@@ -165,58 +162,47 @@ sum(modnull<(Mod@likelihood)) / length(modnull) #P randomized < observed
 net1
 net2
 
-#Choose the network-level metric
-metrics=c("NODF")
+#Choose the network-level metric to be passed as an argument to all functions
+metric=c("NODF") #an example using is binary NODF
 
-#Calculate the difference in the chosen metric between the observed networks
-orig1 = abs(networklevel(net1,index=metrics)
-         -networklevel(net2,index=metrics))
+#Caculate the same metric for both networks
+net1.metric <- networklevel(net1,
+                      index = metric) 
+net2.metric <- networklevel(net2,
+                      index = metric) 
 
-#Check the difference
-orig1
+net1.metric
+net2.metric
 
-#Calculate the difference between pairs of randomized networks
-randomized1=matrix(nrow=length(orig1),ncol=permutations+1)
-row.names(randomized1)=names(orig1)
-randomized1[,1]=orig1
-randomized1
+#Calculate the difference in the metric between the two networks
+diff <- abs(net1.metric - net2.metric)
+diff
 
-i=1
+#Calculate the same metric for all randomized versions of both networks
+randomized.net1.metric <- sapply(nulls1, #the randomized list created before
+                                 networklevel, 
+                                 index = metric)
+randomized.net2.metric <- sapply(nulls2, 
+                                 networklevel, 
+                                 index = metric)
 
-while(i <= permutations){ 
-  
-  net_rand1=permatfull(net1,fixedmar="both",mtype="count",times=1)
-  net_rand1=net_rand1$perm[[1]]
-  net_rand2=permatfull(net2,fixedmar="both",mtype="count",times=1)
-  net_rand2=net_rand2$perm[[1]]
-  lines<-abs(networklevel(net_rand1, index=metrics)-networklevel(net_rand2, index=metrics))
-  randomized1[,i+1]=lines
-  print(i)
-  i=i+1
-  
-} 
+#Calculate the difference between all pairs of randomized networks
+diff.rand <- abs(randomized.net1.metric - randomized.net2.metric)
 
-randomized1
+#Plot the observed value against the distribution of randomized values
+par(mar = c(4,4,5,4))
+plot(density(diff.rand), main="Observed vs. randomized (pairwise differences)",
+     xlim=c(min((diff), min(diff.rand)), 
+            max((diff), max(diff.rand))))
+abline(v=diff, col="red", lwd=2, xlab="")
 
-#Plot the observed difference against the distribution of randomized differences
-levels<-row.names(randomized1)
-for(k in levels){
-		if(any(is.na(randomized1[k,]) == TRUE))
-			{
-			print("k tem NA")
-			} else {
-	plot(density(randomized1[k,]), main="Observed vs. randomized",)
-	abline(v=orig1[k], col="red", lwd=2, xlab="")
-		}
-	}
-
-#Estimate the P-value
-orig1 #observed difference
-mean(randomized1) #mean randomized differences
-sd(randomized1) #SD randomized differences
-(orig1 - mean(randomized1))/sd(randomized1) # Z-value
-sum(randomized1>(orig1)) / length(randomized1) #P randomized > observed
-sum(randomized1<(orig1)) / length(randomized1) #P randomized < observed
+#Estimate the P-values
+diff #observed difference
+mean(diff.rand) #mean randomized differences
+sd(diff.rand) #SD randomized differences
+(diff - mean(diff.rand))/sd(diff.rand) # Z-value
+sum(diff.rand>(diff)) / length(diff.rand) #P randomized > observed
+sum(diff.rand<(diff)) / length(diff.rand) #P randomized < observed
 
 
 ################################################################################
@@ -224,118 +210,57 @@ sum(randomized1<(orig1)) / length(randomized1) #P randomized < observed
 ################################################################################
 
 
-#Use the same two networks imported before
-net1
-net2
-
-#Choose the modularity algorithm
-algorithm=c("Beckett") #this is the DIRTLPAwb+ algorithm
+#Choose the modularity algorithm to be passed as an argument to all functions
+algorithm=c("Beckett") #an example using the DIRTLPAwb+ algorithm
 
 #Calculate modularity for the original networks
 mod1 <- computeModules(net1, 
-                      method = algorithm) 
-mod2 <- computeModules(net2, 
                        method = algorithm)
+mod2 <- computeModules(net2, 
+                       method = algorithm) #in this case DIRTLPAwb+
 
-#Use the same randomized versions created before
-nulls1
-nulls2
+#Check the values
+mod1@likelihood #modularity
+mod2@likelihood #modularity
 
-#Standardize the Q-value (modularity)
-modules.nulls1 <- sapply(nulls1, computeModules,  method = algorithm)
-like.nulls1 <- sapply(modules.nulls1, function(x) x@likelihood)
-mod_val1<- (mod1@likelihood - mean(like.nulls1))/sd(like.nulls1)
-mod_val1
+#Calculate the difference between both networks
+diff <- abs(mod1@likelihood - mod2@likelihood)
+diff
 
-modules.nulls2 <- sapply(nulls2, computeModules,  method = algorithm)
-like.nulls2 <- sapply(modules.nulls2, function(x) x@likelihood)
-mod_val2<- (mod2@likelihood - mean(like.nulls2))/sd(like.nulls2)
-mod_val2
+#Extract module membership
+part1 <- bipartite::module2constraints(mod1)
+row.part1 <- part1[1:nrow(net1)]
+col.part1 <- part1[(nrow(net1)+1):(nrow(net1)+ncol(net1))]
+length(unique((part1))) #number of modules
 
-#As the Q-values are standardized, values higher than 2 are usually
-#significant. To estimate the P-value, do a simple Monte Carlo count.
+part2 <- bipartite::module2constraints(mod2)
+row.part2 <- part2[1:nrow(net2)]
+col.part2 <- part2[(nrow(net2)+1):(nrow(net2)+ncol(net2))]
+length(unique((part2))) #number of modules
 
-#Calculate the difference in standardized Q-values between the two networks
-orig2 = abs(mod_val1-mod_val2)
-names(orig2)<- "Difference in standardized Q"
-orig2
+#Calculate the same metric for all randomized versions of both networks
+nullmod1 <- sapply(nulls1, computeModules, method = algorithm)
+mod1null <- sapply(nullmod1, function(x) x@likelihood)
 
-#Calculate the difference in the chosen metrics between pairs of randomized networks
-randomized2=matrix(nrow=length(orig2),ncol=permutations+1)
-row.names(randomized2)=names(orig2)
-randomized2[,1]=orig2
-randomized2<- as.matrix(randomized2)
-randomized2
+nullmod2 <- sapply(nulls2, computeModules, method = algorithm)
+mod2null <- sapply(nullmod2, function(x) x@likelihood)
 
-i<-1
+#Calculate the difference between all pairs of randomized networks
+diff.rand <- abs(mod1null - mod2null)
 
-while (i<=permutations){ 
-	net_rand1=permatfull(net1,fixedmar="both",mtype="count",times=1)
-	net_rand1=net_rand1$perm[[1]]
-	
-	net_rand2=permatfull(net2,fixedmar="both",mtype="count",times=1)
-	net_rand2=net_rand2$perm[[1]]
+#Plot the observed value against the distribution of randomized values
+par(mar = c(4,4,5,4))
+plot(density(diff.rand), main="Observed vs. randomized",
+     xlim=c(min((diff), min(diff.rand)), 
+            max((diff), max(diff.rand))))
+abline(v=diff, col="red", lwd=2, xlab="")
 
-	print("passed")
-	mod1_rand <- try(computeModules(net_rand1, method = algorithm))
-	print("mod 1")
-	print(i)
-	
-	mod2_rand <- try(computeModules(net_rand2, method = algorithm))
-	print("mod 2")
-	print(i)
-	
-	nulls1_rand <- nullmodel(net_rand1, N=permutations, method="vaznull")
- 	modules.nulls1_rand <- sapply(nulls1_rand, 
- 	                              computeModules, method = algorithm)
- 	print("passed nulls rand1")
-	like.nulls1_rand <- sapply(modules.nulls1, function(x) x@likelihood)
-	mod_val1_rand<- (mod1@likelihood - 
-	                     mean(like.nulls1_rand))/sd(like.nulls1_rand)
-
-	nulls2_rand <- nullmodel(net_rand1, N=permutations, method="vaznull")
-	modules.nulls2_rand <- sapply(nulls2_rand, 
-	                              computeModules, method = algorithm)
-	print("passed nulls rand2")
-	like.nulls2_rand <- sapply(modules.nulls1, function(x) x@likelihood)
-	mod_val1_rand<- (mod1@likelihood - 
-	                     mean(like.nulls2_rand))/sd(like.nulls2_rand)
-	
-	print("passed TRY")
-		
-	lines<-abs(mod_val1_rand-mod_val2_rand)
-
-	randomized2[,i+1]=lines
-	
-	print(i)
-	print(Sys.time())
-	i<-i+1
-	name<- paste("RANDOMIZED_values_MOD_patef_sink","_",i,".txt")
-	} 
-
-nometxt<- paste("RANDOMIZED_values_MOD_Patefield_TXT","_",i,".txt")
-nometxt
-
-#Plot the observed difference against the distribution of randomized pairwise differences
-levels<-row.names(randomized2)
-for(k in levels)
-	{
-		if(any(is.na(randomized2[k,]) == TRUE))
-			{
-			print("k tem NA")
-			} else {
-	plot(density(randomized2[k,]), main="Observed vs. randomized",)
-	abline(v=orig2[k], col="red", lwd=2, xlab="")
-		}
-	}
-
-#Estimate the P-value
-orig2 #observed difference
-mean(randomized2) #mean randomized differences
-sd(randomized2) #SD randomized differences
-(orig2 - mean(randomized2))/sd(randomized2) # Z-value
-sum(randomized2>(orig2)) / length(randomized2) #P randomized > observed
-sum(randomized2<(orig2)) / length(randomized2) #P randomized < observed
+diff #observed difference
+mean(diff.rand) #mean randomized differences
+sd(diff.rand) #SD randomized differences
+(diff - mean(diff.rand))/sd(diff.rand) # Z-value
+sum(diff.rand>(diff)) / length(diff.rand) #P randomized > observed
+sum(diff.rand<(diff)) / length(diff.rand) #P randomized < observed
 
 
 #################################### END #######################################
