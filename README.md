@@ -19,7 +19,7 @@ Disclaimer: You may use this software freely for any purposes at your own risk. 
 
 ## Functionality and origin
 
-This script provides a series of codes to estimate the significance (P-value) of a network-level metric calculated for a single network and the significance of a difference in a metric between two networks. These tasks are carried out using Monte Carlo procedures. 
+This script provides a series of codes to estimate (i) the significance (P-value) of a network-level metric calculated for a single network, and (ii) the significance of a difference in a metric between two networks. These tasks are carried out using Monte Carlo procedures. 
 
 In a nutshell, you follow these steps to estimate the P-value of a metric calculated for one network:
 
