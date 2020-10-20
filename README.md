@@ -65,6 +65,8 @@ If you want to understand the concepts used in our script, read the following wo
 
 * Felix, G. M., Pinheiro, R. B. P., Poulin, R., Krasnov, B. R., & Mello, M. A. R. (2017). [The compound topology of a continent-wide interaction network explained by an integrative hypothesis of specialization](https://doi.org/10.1101/236687). BioRxiv, 236687.
 
+* Manly, B. F. J. (2007). [Randomization, bootstrap and Monte Carlo methods in biology](https://amzn.to/3ksSGv3). (3rd ed.). Boca Raton: Chapman & Hall/CRC.
+
 * Mello, M. A. R., Felix, G. M., Pinheiro, R. B. P., Muylaert, R. L., Geiselman, C., Santana, S. E., … Stevens, R. D. (2019). [Insights into the assembly rules of a continent-wide multilayer network](https://doi.org/10.1038/s41559-019-1002-3). Nature Ecology & Evolution, 3(11), 1525–1532.
 
 * Pinheiro, R. B. P., Felix, G. M. F., Dormann, C. F., & Mello, M. A. R. (2019). [A new model explaining the origin of different topologies in interaction networks](https://doi.org/10.1002/ecy.2796). Ecology, 100(9), e02796.
