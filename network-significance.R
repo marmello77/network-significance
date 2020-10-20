@@ -85,7 +85,7 @@ nulls2 <- nullmodel(net2,
 ################################################################################
 
 
-#Calculate a metric of your choice for the original network
+#Choose a network-level metric to be passed as an argument to all functions
 metric <- networklevel(net1,
                      index="NODF") #an example using binary NODF
 
@@ -93,7 +93,7 @@ metric <- networklevel(net1,
 metric
 
 #Calculate metric for the randomized networks
-randomized.metric <- unlist(sapply(nulls1, networklevel, index="NODF"))
+randomized.metric <- unlist(sapply(nulls1, networklevel, index = metric))
 
 #Plot the observed value against the distribution of randomized values
 par(mar = c(4,4,5,4))
@@ -118,8 +118,8 @@ sum(randomized.metric<(metric)) / length(randomized.metric) #P randomized < obse
 #Modularity needs a slightly different code because it uses a different function
 #from the package bipartite.
 
-#Choose the modularity algorithm to be passed as an argument to all functions
-algorithm=c("Beckett") #an example usingthe DIRTLPAwb+ algorithm
+#Choose a modularity algorithm to be passed as an argument to all functions
+algorithm=c("Beckett") #an example using the DIRTLPAwb+ algorithm
 
 #Calculate modularity for the original network
 mod <- computeModules(net1, 
@@ -162,8 +162,8 @@ sum(modnull<(mod@likelihood)) / length(modnull) #P randomized < observed
 net1
 net2
 
-#Choose the network-level metric to be passed as an argument to all functions
-metric=c("NODF") #an example using is binary NODF
+#Choose a network-level metric to be passed as an argument to all functions
+metric=c("NODF") #an example using binary NODF
 
 #Caculate the same metric for both networks
 net1.metric <- networklevel(net1,
