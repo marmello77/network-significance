@@ -86,28 +86,31 @@ nulls2 <- nullmodel(net2,
 
 
 #Choose a network-level metric to be passed as an argument to all functions
-metric <- networklevel(net1,
-                     index="NODF") #an example using binary NODF
+metric <- c("NODF") #an example using binary NODF
+
+#Calculate the metric for the original network
+top <- networklevel(net1,
+                     index=metric) 
 
 #Check the value
-metric
+top
 
 #Calculate metric for the randomized networks
-randomized.metric <- unlist(sapply(nulls1, networklevel, index = metric))
+randomized.top <- unlist(sapply(nulls1, networklevel, index = metric))
 
 #Plot the observed value against the distribution of randomized values
 par(mar = c(4,4,5,4))
-plot(density(randomized.metric), main="Observed vs. randomized",
-     xlim=c(min((metric), min(randomized.metric)), 
-            max((metric), max(randomized.metric))))
-abline(v=metric, col="red", lwd=2, xlab="")
+plot(density(randomized.top), main="Observed vs. randomized",
+     xlim=c(min((top), min(randomized.top)), 
+            max((top), max(randomized.top))))
+abline(v=top, col="red", lwd=2, xlab="")
 
-metric #observed value
-mean(randomized.metric) #randomized mean
-sd(randomized.metric) #randomized SD
-(metric - mean(randomized.metric))/sd(randomized.metric) # Z-value
-sum(randomized.metric>(metric)) / length(randomized.metric) #P randomized > observed
-sum(randomized.metric<(metric)) / length(randomized.metric) #P randomized < observed
+top #observed value
+mean(randomized.top) #randomized mean
+sd(randomized.top) #randomized SD
+(top - mean(randomized.top))/sd(randomized.top) # Z-value
+sum(randomized.top>(top)) / length(randomized.top) #P randomized > observed
+sum(randomized.top<(top)) / length(randomized.top) #P randomized < observed
 
 
 ################################################################################
