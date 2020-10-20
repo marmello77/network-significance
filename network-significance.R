@@ -108,9 +108,9 @@ abline(v=top, col="red", lwd=2, xlab="")
 top #observed value
 mean(randomized.top) #randomized mean
 sd(randomized.top) #randomized SD
-(top - mean(randomized.top))/sd(randomized.top) # Z-value
-sum(randomized.top>(top)) / length(randomized.top) #P randomized > observed
-sum(randomized.top<(top)) / length(randomized.top) #P randomized < observed
+(top - mean(randomized.top)) / sd(randomized.top) # Z-value
+sum(randomized.top>=(top)) / length(randomized.top) #P randomized > observed
+sum(randomized.top<=(top)) / length(randomized.top) #P randomized < observed
 
 
 ################################################################################
@@ -151,9 +151,9 @@ abline(v=mod@likelihood, col="red", lwd=2, xlab="")
 mod@likelihood #observed value
 mean(modnull) #randomized mean
 sd(modnull) #randomized SD
-(mod@likelihood - mean(modnull))/sd(modnull) # Z-value
-sum(modnull>(mod@likelihood)) / length(modnull) #P randomized > observed
-sum(modnull<(mod@likelihood)) / length(modnull) #P randomized < observed
+(mod@likelihood - mean(modnull)) / sd(modnull) # Z-value
+sum(modnull>=(mod@likelihood)) / length(modnull) #P randomized > observed
+sum(modnull<=(mod@likelihood)) / length(modnull) #P randomized < observed
 
 
 ################################################################################
@@ -203,9 +203,9 @@ abline(v=diff, col="red", lwd=2, xlab="")
 diff #observed difference
 mean(diff.rand) #mean randomized differences
 sd(diff.rand) #SD randomized differences
-(diff - mean(diff.rand))/sd(diff.rand) # Z-value
-sum(diff.rand>(diff)) / length(diff.rand) #P randomized > observed
-sum(diff.rand<(diff)) / length(diff.rand) #P randomized < observed
+(diff - mean(diff.rand)) / sd(diff.rand) # Z-value
+sum(diff.rand>=(diff)) / length(diff.rand) #P randomized > observed
+sum(diff.rand<=(diff)) / length(diff.rand) #P randomized < observed
 
 
 ################################################################################
@@ -264,9 +264,9 @@ abline(v=diff, col="red", lwd=2, xlab="")
 diff #observed difference
 mean(diff.rand) #mean randomized differences
 sd(diff.rand) #SD randomized differences
-(diff - mean(diff.rand))/sd(diff.rand) # Z-value
-sum(diff.rand>(diff)) / length(diff.rand) #P randomized > observed
-sum(diff.rand<(diff)) / length(diff.rand) #P randomized < observed
+(diff - mean(diff.rand)) / sd(diff.rand) # Z-value
+sum(diff.rand>=(diff)) / length(diff.rand) #P randomized > observed
+sum(diff.rand<=(diff)) / length(diff.rand) #P randomized < observed
 
 
 #################################### END #######################################
